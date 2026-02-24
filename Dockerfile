@@ -65,6 +65,7 @@ server {\n\
 }\n\
 EOF\n\
 php artisan migrate --force\n\
+php artisan db:seed --force\n\
 php-fpm -D\n\
 nginx -g "daemon off;"' > /start.sh \
     && chmod +x /start.sh
