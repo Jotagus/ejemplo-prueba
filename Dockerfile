@@ -27,8 +27,8 @@ RUN apt-get update && apt-get install -y \
         curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Habilitar mod_rewrite de Apache (necesario para Laravel)
-RUN a2enmod rewrite
+# Corregir conflicto de MPM y habilitar mod_rewrite
+RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork rewrite
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
