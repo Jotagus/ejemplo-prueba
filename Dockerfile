@@ -40,7 +40,7 @@ RUN echo 'server { \n\
         try_files $uri $uri/ /index.php?$query_string; \n\
     } \n\
     location ~ \.php$ { \n\
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock; \n\
+        fastcgi_pass 127.0.0.1:9000; \n\
         fastcgi_index index.php; \n\
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name; \n\
         include fastcgi_params; \n\
@@ -61,7 +61,10 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
+# Script de inicio
+RUN echo '#!/bin/sh\nphp-fpm -D\nnginx -g "daemon off;"' > /start.sh \
+    && chmod +x /start.sh
+
 EXPOSE 80
 
-# Iniciar PHP-FPM y Nginx juntos
-CMD service php8.2-fpm start && nginx -g "daemon off;"
+CMD ["/start.sh"]
