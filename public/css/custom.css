@@ -1,0 +1,621 @@
+/* ============================================
+   CUSTOM.CSS - COMPONENTES EMDELL
+   Archivo complementario para el sistema de inventario
+   ============================================ */
+
+/* ==================== CARDS ==================== */
+.card-emdell {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E5E7EB;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.card-emdell:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+.card-emdell-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #E5E7EB;
+    background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+}
+
+.card-emdell-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2D2D2D;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-emdell-title i {
+    color: #FF6B35;
+}
+
+.card-emdell-body {
+    padding: 24px;
+}
+
+.card-emdell-footer {
+    padding: 16px 24px;
+    background: #F8F9FA;
+    border-top: 1px solid #E5E7EB;
+}
+
+/* Card Estadística */
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E5E7EB;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #E63946 0%, #FF6B35 50%, #FFC857 100%);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.stat-card-icon.red {
+    background: linear-gradient(135deg, #E63946 0%, #C1121F 100%);
+}
+
+.stat-card-icon.orange {
+    background: linear-gradient(135deg, #FF6B35 0%, #E63946 100%);
+}
+
+.stat-card-icon.yellow {
+    background: linear-gradient(135deg, #FFC857 0%, #FF6B35 100%);
+}
+
+.stat-card-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2D2D2D;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-card-label {
+    font-size: 0.9rem;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.stat-card-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.stat-card-trend.up {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.stat-card-trend.down {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+/* ==================== BOTONES ==================== */
+.btn-emdell-primary {
+    background: linear-gradient(135deg, #E63946 0%, #FF6B35 100%);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-emdell-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4);
+    color: white;
+}
+
+.btn-emdell-primary:active {
+    transform: translateY(0);
+}
+
+.btn-emdell-secondary {
+    background: white;
+    color: #E63946;
+    border: 2px solid #E63946;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-emdell-secondary:hover {
+    background: #E63946;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+}
+
+.btn-emdell-outline {
+    background: transparent;
+    color: #6B7280;
+    border: 2px solid #E5E7EB;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-emdell-outline:hover {
+    background: #F8F9FA;
+    border-color: #FF6B35;
+    color: #FF6B35;
+}
+
+.btn-emdell-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8F9FA;
+    border: 2px solid transparent;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-emdell-icon:hover {
+    background: white;
+    border-color: #FF6B35;
+    color: #FF6B35;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ==================== TABLAS ==================== */
+.table-emdell {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.table-emdell thead {
+    background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+}
+
+.table-emdell thead th {
+    padding: 16px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #2D2D2D;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #E5E7EB;
+}
+
+.table-emdell tbody tr {
+    border-bottom: 1px solid #F3F4F6;
+    transition: all 0.2s ease;
+}
+
+.table-emdell tbody tr:hover {
+    background: #F8F9FA;
+}
+
+.table-emdell tbody td {
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    color: #2D2D2D;
+    vertical-align: middle;
+}
+
+.table-emdell tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* ==================== BADGES ==================== */
+.badge-emdell {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-emdell.primary {
+    background: linear-gradient(135deg, #E63946 0%, #FF6B35 100%);
+    color: white;
+}
+
+.badge-emdell.success {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-emdell.warning {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.badge-emdell.danger {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.badge-emdell.info {
+    background: #DBEAFE;
+    color: #1E40AF;
+}
+
+.badge-emdell.secondary {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+/* ==================== FORMS ==================== */
+.form-emdell {
+    width: 100%;
+}
+
+.form-emdell .form-label {
+    font-weight: 600;
+    color: #2D2D2D;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-emdell .form-control,
+.form-emdell .form-select {
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-emdell .form-control:focus,
+.form-emdell .form-select:focus {
+    outline: none;
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+.form-emdell .form-control::placeholder {
+    color: #9CA3AF;
+}
+
+.form-emdell .input-group {
+    position: relative;
+}
+
+.form-emdell .input-group-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+    z-index: 10;
+}
+
+.form-emdell .input-group .form-control {
+    padding-left: 48px;
+}
+
+/* ==================== MODAL MEJORADO ==================== */
+.modal-emdell .modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modal-emdell .modal-header {
+    background: linear-gradient(135deg, #E63946 0%, #FF6B35 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 24px;
+    border: none;
+}
+
+.modal-emdell .modal-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.modal-emdell .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.modal-emdell .modal-body {
+    padding: 24px;
+}
+
+.modal-emdell .modal-footer {
+    border-top: 1px solid #E5E7EB;
+    padding: 20px 24px;
+}
+
+/* ==================== PAGINATION ==================== */
+.pagination-emdell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.pagination-emdell .page-link {
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #6B7280;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.pagination-emdell .page-link:hover {
+    background: #F8F9FA;
+    border-color: #FF6B35;
+    color: #FF6B35;
+}
+
+.pagination-emdell .page-link.active {
+    background: linear-gradient(135deg, #E63946 0%, #FF6B35 100%);
+    border-color: #E63946;
+    color: white;
+}
+
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb-emdell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 24px;
+}
+
+.breadcrumb-emdell a {
+    color: #6B7280;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-emdell a:hover {
+    color: #FF6B35;
+}
+
+.breadcrumb-emdell .separator {
+    color: #9CA3AF;
+}
+
+.breadcrumb-emdell .active {
+    color: #E63946;
+    font-weight: 600;
+}
+
+/* ==================== DROPDOWNS ==================== */
+.dropdown-emdell {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 8px;
+    min-width: 200px;
+}
+
+.dropdown-emdell .dropdown-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #2D2D2D;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-emdell .dropdown-item:hover {
+    background: #F8F9FA;
+    color: #FF6B35;
+}
+
+.dropdown-emdell .dropdown-divider {
+    margin: 8px 0;
+    border-color: #E5E7EB;
+}
+
+/* ==================== LOADING SPINNER ==================== */
+.spinner-emdell {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #F3F4F6;
+    border-top: 4px solid #E63946;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==================== TABS ==================== */
+.tabs-emdell {
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid #E5E7EB;
+    margin-bottom: 24px;
+}
+
+.tabs-emdell .tab-item {
+    padding: 12px 24px;
+    font-weight: 600;
+    color: #6B7280;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    bottom: -2px;
+}
+
+.tabs-emdell .tab-item:hover {
+    color: #FF6B35;
+}
+
+.tabs-emdell .tab-item.active {
+    color: #E63946;
+    border-bottom-color: #E63946;
+}
+
+/* ==================== TOOLTIP ==================== */
+.tooltip-emdell {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-emdell .tooltip-text {
+    visibility: hidden;
+    background: #1A1A2E;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.tooltip-emdell:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ==================== PROGRESS BAR ==================== */
+.progress-emdell {
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-emdell-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E63946 0%, #FF6B35 50%, #FFC857 100%);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    color: #E5E7EB;
+    margin-bottom: 20px;
+}
+
+.empty-state-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2D2D2D;
+    margin-bottom: 12px;
+}
+
+.empty-state-text {
+    color: #6B7280;
+    margin-bottom: 24px;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.text-emdell-red { color: #E63946; }
+.text-emdell-orange { color: #FF6B35; }
+.text-emdell-yellow { color: #FFC857; }
+
+.bg-emdell-red { background-color: #E63946; }
+.bg-emdell-orange { background-color: #FF6B35; }
+.bg-emdell-yellow { background-color: #FFC857; }
+
+.gradient-emdell {
+    background: linear-gradient(135deg, #E63946 0%, #FF6B35 50%, #FFC857 100%);
+}
+
+.shadow-emdell-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-emdell-md {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-emdell-lg {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
