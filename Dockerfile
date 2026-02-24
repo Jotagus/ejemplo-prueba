@@ -45,7 +45,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Script de inicio que usa el PORT dinámico de Railway
+# Script de inicio con migraciones y PORT dinámico
 RUN echo '#!/bin/sh\n\
 PORT=${PORT:-80}\n\
 cat > /etc/nginx/sites-available/default <<EOF\n\
@@ -64,6 +64,7 @@ server {\n\
     }\n\
 }\n\
 EOF\n\
+php artisan migrate --force\n\
 php-fpm -D\n\
 nginx -g "daemon off;"' > /start.sh \
     && chmod +x /start.sh
