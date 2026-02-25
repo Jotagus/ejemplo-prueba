@@ -198,6 +198,7 @@
 
     <div class="tab-content" id="invTabContent">
 
+        {{-- TAB STOCK --}}
         <div class="tab-pane fade show active" id="stock" role="tabpanel">
 
             <div class="d-flex align-items-center mb-3 gap-3">
@@ -291,13 +292,11 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    {{-- Botón Ver (todos los roles) --}}
                                     <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal"
                                         data-bs-target="#showModal{{ $material->id }}" title="Ver detalles">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                     @canEdit
-                                    {{-- Botón Editar --}}
                                     <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
                                         data-bs-target="#editStockModal{{ $material->id }}" title="Actualizar stock">
                                         <i class="bi bi-pencil-square"></i>
@@ -337,6 +336,7 @@
             </div>
         </div>
 
+        {{-- TAB CRÍTICOS --}}
         <div class="tab-pane fade" id="criticos" role="tabpanel">
 
             <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
@@ -477,7 +477,7 @@
     </div>
 </div>
 
-{{-- ═══ MODALES VER ═══ --}}
+{{-- MODALES VER --}}
 @foreach($materiales as $material)
     <div class="modal fade" id="showModal{{ $material->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -488,7 +488,8 @@
                             <i class="bi bi-box-seam text-info fs-4"></i>
                         </div>
                         <div>
-                            <span class="text-uppercase small text-muted d-block" style="font-size:0.7rem; letter-spacing:1px;">Detalles del Material</span>
+                            <span class="text-uppercase small text-muted d-block"
+                                style="font-size:0.7rem; letter-spacing:1px;">Detalles del Material</span>
                             <span class="text-body">{{ $material->nombre }}</span>
                         </div>
                     </h5>
@@ -521,7 +522,8 @@
                         <div class="col-md-4">
                             <label class="form-label text-muted fw-semibold small mb-1">Subcategoría</label>
                             <div>
-                                <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-3 py-2 border border-warning-subtle">
+                                <span
+                                    class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-3 py-2 border border-warning-subtle">
                                     <i class="bi bi-diagram-3-fill me-1"></i>
                                     {{ $material->subcategoria->nombre }}
                                 </span>
@@ -543,69 +545,72 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label text-muted fw-semibold small mb-1">Descripción</label>
-                            <p class="text-secondary bg-body-secondary p-3 rounded mb-0" style="font-size:0.9rem; min-height:70px;">
+                            <p class="text-secondary bg-body-secondary p-3 rounded mb-0"
+                                style="font-size:0.9rem; min-height:70px;">
                                 {{ $material->descripcion ?? 'Sin descripción registrada.' }}
                             </p>
                         </div>
 
-                        {{-- ── DATOS DE STOCK ── --}}
                         @if($material->detalleMaterial)
-                        @php $det = $material->detalleMaterial; @endphp
-                        <div class="col-12 mt-1">
-                            <hr class="opacity-25">
-                            <p class="text-uppercase small fw-bold text-muted mb-3" style="letter-spacing:0.08em;">
-                                <i class="bi bi-box-seam me-1"></i>Información de Stock
-                            </p>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted fw-semibold small mb-1">Stock Actual</label>
-                            <div class="p-2 bg-body-secondary rounded text-center">
-                                @php
-                                    $colorStock = 'text-success';
-                                    if ($det->cantidad_actual <= 0) $colorStock = 'text-danger';
-                                    elseif ($det->cantidad_actual <= $det->cantidad_minima) $colorStock = 'text-warning';
-                                @endphp
-                                <span class="fw-bold fs-5 {{ $colorStock }}">
-                                    {{ number_format($det->cantidad_actual, 2) }}
-                                </span>
-                                <small class="text-muted d-block">{{ $material->unidadMedida->abreviatura }}</small>
+                            @php $det = $material->detalleMaterial; @endphp
+                            <div class="col-12 mt-1">
+                                <hr class="opacity-25">
+                                <p class="text-uppercase small fw-bold text-muted mb-3" style="letter-spacing:0.08em;">
+                                    <i class="bi bi-box-seam me-1"></i>Información de Stock
+                                </p>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted fw-semibold small mb-1">Stock Mínimo</label>
-                            <div class="p-2 bg-body-secondary rounded text-center">
-                                <span class="fw-bold fs-5 text-secondary">
-                                    {{ number_format($det->cantidad_minima, 2) }}
-                                </span>
-                                <small class="text-muted d-block">{{ $material->unidadMedida->abreviatura }}</small>
+                            <div class="col-md-3">
+                                <label class="form-label text-muted fw-semibold small mb-1">Stock Actual</label>
+                                <div class="p-2 bg-body-secondary rounded text-center">
+                                    @php
+                                        $colorStock = 'text-success';
+                                        if ($det->cantidad_actual <= 0)
+                                            $colorStock = 'text-danger';
+                                        elseif ($det->cantidad_actual <= $det->cantidad_minima)
+                                            $colorStock = 'text-warning';
+                                    @endphp
+                                    <span class="fw-bold fs-5 {{ $colorStock }}">
+                                        {{ number_format($det->cantidad_actual, 2) }}
+                                    </span>
+                                    <small class="text-muted d-block">{{ $material->unidadMedida->abreviatura }}</small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted fw-semibold small mb-1">Precio Unitario</label>
-                            <div class="p-2 bg-body-secondary rounded text-center">
-                                <span class="fw-bold fs-5 text-info">
-                                    ${{ number_format($det->precio_unitario, 2) }}
-                                </span>
-                                <small class="text-muted d-block">por unidad</small>
+                            <div class="col-md-3">
+                                <label class="form-label text-muted fw-semibold small mb-1">Stock Mínimo</label>
+                                <div class="p-2 bg-body-secondary rounded text-center">
+                                    <span class="fw-bold fs-5 text-secondary">
+                                        {{ number_format($det->cantidad_minima, 2) }}
+                                    </span>
+                                    <small class="text-muted d-block">{{ $material->unidadMedida->abreviatura }}</small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label text-muted fw-semibold small mb-1">Valor Total</label>
-                            <div class="p-2 bg-body-secondary rounded text-center">
-                                <span class="fw-bold fs-5 text-success">
-                                    ${{ number_format($det->costo_total, 2) }}
-                                </span>
-                                <small class="text-muted d-block">en inventario</small>
+                            <div class="col-md-3">
+                                <label class="form-label text-muted fw-semibold small mb-1">Precio Unitario</label>
+                                <div class="p-2 bg-body-secondary rounded text-center">
+                                    <span class="fw-bold fs-5 text-info">
+                                        ${{ number_format($det->precio_unitario, 2) }}
+                                    </span>
+                                    <small class="text-muted d-block">por unidad</small>
+                                </div>
                             </div>
-                        </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-muted fw-semibold small mb-1">Valor Total</label>
+                                <div class="p-2 bg-body-secondary rounded text-center">
+                                    <span class="fw-bold fs-5 text-success">
+                                        ${{ number_format($det->costo_total, 2) }}
+                                    </span>
+                                    <small class="text-muted d-block">en inventario</small>
+                                </div>
+                            </div>
                         @endif
-
                     </div>
                 </div>
                 <div class="modal-footer bg-body-tertiary border-top-0 d-flex justify-content-between p-3">
                     <div class="d-flex gap-3 text-muted" style="font-size:0.75rem;">
-                        <span><i class="bi bi-calendar-plus me-1"></i><strong>Creado:</strong> {{ $material->created_at->format('d/m/Y H:i') }}</span>
-                        <span><i class="bi bi-calendar-check me-1"></i><strong>Actualizado:</strong> {{ $material->updated_at->format('d/m/Y H:i') }}</span>
+                        <span><i class="bi bi-calendar-plus me-1"></i><strong>Creado:</strong>
+                            {{ $material->created_at->format('d/m/Y H:i') }}</span>
+                        <span><i class="bi bi-calendar-check me-1"></i><strong>Actualizado:</strong>
+                            {{ $material->updated_at->format('d/m/Y H:i') }}</span>
                     </div>
                     <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
                 </div>
@@ -614,7 +619,7 @@
     </div>
 @endforeach
 
-{{-- ═══ MODALES EDITAR ═══ --}}
+{{-- MODALES EDITAR --}}
 @canEdit
 @foreach($materiales as $material)
     <div class="modal fade" id="editStockModal{{ $material->id }}" tabindex="-1" aria-hidden="true">
@@ -782,8 +787,8 @@
             noResultRow.id = 'noResultRow';
             noResultRow.style.display = 'none';
             noResultRow.innerHTML = `<td colspan="9" class="text-center text-muted py-4">
-                                    <i class="bi bi-search fs-1 d-block mb-2"></i>
-                                    No se encontraron materiales para "<span id="busquedaTexto"></span>"</td>`;
+                    <i class="bi bi-search fs-1 d-block mb-2"></i>
+                    No se encontraron materiales para "<span id="busquedaTexto"></span>"</td>`;
             tbody.appendChild(noResultRow);
 
             function getAllRows() {
@@ -794,6 +799,15 @@
             function applyFilter(term) {
                 const q = term.trim().toLowerCase();
                 const all = getAllRows();
+
+                // Si no hay filas (tabla vacía), no hacer nada
+                if (all.length === 0) {
+                    btnClear.style.display = 'none';
+                    paginInfo.textContent = '';
+                    paginCtrls.innerHTML = '';
+                    return;
+                }
+
                 filteredRows = q === '' ? all : all.filter(r => r.innerText.toLowerCase().includes(q));
                 btnClear.style.display = q ? '' : 'none';
                 currentPage = 1;
@@ -851,6 +865,7 @@
             input.addEventListener('input', () => applyFilter(input.value));
             btnClear.addEventListener('click', () => { input.value = ''; applyFilter(''); input.focus(); });
             rowsSel.addEventListener('change', () => { currentPage = 1; render(); });
+
             applyFilter('');
         });
     </script>
