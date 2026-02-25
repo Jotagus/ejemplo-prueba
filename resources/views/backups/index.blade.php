@@ -27,32 +27,6 @@
             margin-bottom: 1.25rem;
         }
 
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .section-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0;
-            line-height: 1.2;
-        }
-
-        .section-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-dark);
-            opacity: 0.5;
-            margin: 0;
-        }
-
         .btn-backup {
             background: linear-gradient(135deg, #FF6B35, #FFC107);
             border: none;
@@ -66,7 +40,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            cursor: pointer;
+            text-decoration: none;
         }
 
         .btn-backup:hover {
@@ -77,12 +51,6 @@
 
         .btn-backup:active {
             transform: translateY(0);
-        }
-
-        .btn-backup:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .pagination-wrapper {
@@ -181,22 +149,6 @@
             margin: 0;
         }
 
-        .spinner-backup {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
         .info-railway {
             background: rgba(255, 193, 7, 0.08);
             border: 1px solid rgba(255, 193, 7, 0.3);
@@ -218,27 +170,17 @@
         {{-- Aviso Railway --}}
         <div class="info-railway">
             <i class="bi bi-info-circle-fill text-warning fs-5"></i>
-            <span>En este entorno los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se
-                almacenan en el servidor.</span>
+            <span>Los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se almacenan en el servidor.</span>
         </div>
 
         <div class="section-header">
             <div class="ms-auto">
-                <button type="button" class="btn-backup" id="btnGenerar" onclick="generarBackup()">
-                    <span class="spinner-backup" id="spinnerGenerar"></span>
-                    <i class="bi bi-cloud-arrow-down-fill" id="iconGenerar"></i>
-                    <span id="textoGenerar">Generar Nuevo Respaldo</span>
-                </button>
+                <a href="{{ route('backups.generate') }}" class="btn-backup" id="btnGenerar">
+                    <i class="bi bi-cloud-arrow-down-fill"></i>
+                    <span>Generar Nuevo Respaldo</span>
+                </a>
             </div>
         </div>
-
-        {{-- Formulario oculto para el POST --}}
-        <form id="formGenerarBackup" action="{{ route('backups.generate') }}" method="POST" style="display:none;">
-            @csrf
-        </form>
-
-        {{-- iframe oculto para recibir la descarga sin recargar la página --}}
-        <iframe id="iframeDescarga" name="iframeDescarga" style="display:none;"></iframe>
 
         <div class="card-emdell shadow-sm mb-4">
             <div class="table-responsive">
@@ -259,20 +201,18 @@
                             @php
                                 $partesFecha = explode(' ', $file['fecha']);
                                 $fecha = $partesFecha[0] ?? '-';
-                                $hora = $partesFecha[1] ?? '-';
+                                $hora  = $partesFecha[1] ?? '-';
                             @endphp
                             <tr style="border-color: var(--border-color);">
                                 <td class="ps-4 text-muted small">{{ $i + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div
-                                            style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                             <i class="bi bi-file-earmark-zip-fill text-warning"></i>
                                         </div>
                                         <div>
                                             <span class="fw-bold small">{{ $file['nombre'] }}</span>
-                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de
-                                                datos</span>
+                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de datos</span>
                                         </div>
                                     </div>
                                 </td>
@@ -304,8 +244,7 @@
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
-                                        <p>En este entorno los backups se descargan directamente.<br>Usa el botón de arriba para
-                                            generar y descargar un respaldo.</p>
+                                        <p>Los backups se descargan directamente a tu equipo.<br>Usa el botón de arriba para generar un respaldo.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -345,45 +284,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-        function generarBackup() {
-            Swal.fire({
-                title: '¿Generar respaldo ahora?',
-                html: 'Se creará un archivo <strong>.zip</strong> con toda la base de datos actual y se descargará directamente a tu equipo.',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#FF6B35',
-                cancelButtonColor: '#6B7280',
-                confirmButtonText: '<i class="bi bi-cloud-arrow-down-fill me-1"></i> Sí, generar',
-                cancelButtonText: 'Cancelar',
-                background: 'var(--card-bg)',
-                color: 'var(--text-dark)'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    // Mostrar spinner
-                    document.getElementById('spinnerGenerar').style.display = 'block';
-                    document.getElementById('iconGenerar').style.display = 'none';
-                    document.getElementById('textoGenerar').textContent = 'Generando...';
-                    document.getElementById('btnGenerar').disabled = true;
-
-                    // Crear un link temporal y hacer click
-                    const link = document.createElement('a');
-                    link.href = '{{ route("backups.generate") }}';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    // Restaurar botón después de unos segundos
-                    setTimeout(() => {
-                        document.getElementById('spinnerGenerar').style.display = 'none';
-                        document.getElementById('iconGenerar').style.display = 'inline';
-                        document.getElementById('textoGenerar').textContent = 'Generar Nuevo Respaldo';
-                        document.getElementById('btnGenerar').disabled = false;
-                    }, 8000);
-                }
-            });
-        }
-
         function confirmarEliminar(nombre, url) {
             Swal.fire({
                 title: '¿Eliminar respaldo?',
@@ -406,10 +306,10 @@
         }
 
         function setupPagination({ tbodyId, rowsSelId, infoId, ctrlsId, label }) {
-            const tbody = document.getElementById(tbodyId);
+            const tbody   = document.getElementById(tbodyId);
             const rowsSel = document.getElementById(rowsSelId);
-            const info = document.getElementById(infoId);
-            const ctrls = document.getElementById(ctrlsId);
+            const info    = document.getElementById(infoId);
+            const ctrls   = document.getElementById(ctrlsId);
             if (!tbody || !rowsSel) return;
 
             let page = 1;
@@ -458,11 +358,11 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             setupPagination({
-                tbodyId: 'backupsBody',
+                tbodyId:   'backupsBody',
                 rowsSelId: 'rowsBackups',
-                infoId: 'backupsInfo',
-                ctrlsId: 'backupsControles',
-                label: 'respaldos'
+                infoId:    'backupsInfo',
+                ctrlsId:   'backupsControles',
+                label:     'respaldos'
             });
         });
     </script>
