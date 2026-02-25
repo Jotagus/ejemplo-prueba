@@ -45,11 +45,7 @@ class BackupController extends Controller
             $dbUser = config('database.connections.mysql.username');
             $dbPassword = config('database.connections.mysql.password');
 
-            // Detecta mysqldump según el sistema operativo
-            $mysqlBin = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
-                ? 'C:/xampp/mysql/bin/mysqldump'
-                : 'mysqldump';
-
+            $mysqlBin = '/usr/bin/mysqldump';
             $timestamp = Carbon::now('America/La_Paz')->format('Y-m-d-H-i-s');
             $sqlFile = storage_path("app/private/emdell/dump-{$timestamp}.sql");
             $zipFile = storage_path("app/private/emdell/emdell-backup-{$timestamp}.zip");
@@ -58,20 +54,18 @@ class BackupController extends Controller
                 mkdir(storage_path('app/private/emdell'), 0755, true);
             }
 
-            // Buscar dónde está mysqldump
-            exec('which mysqldump 2>&1', $whichOutput, $whichCode);
-            $mysqlBin = !empty($whichOutput[0]) ? trim($whichOutput[0]) : 'mysqldump';
-
             $command = "{$mysqlBin} -h {$dbHost} -P {$dbPort} -u {$dbUser} " .
                 ($dbPassword ? "-p\"{$dbPassword}\"" : "") .
-                " {$dbName} > \"{$sqlFile}\" 2>&1";
+                " {$dbName} 2>/tmp/mysqldump_error.txt > \"{$sqlFile}\"";
 
             exec($command, $output, $exitCode);
 
             if ($exitCode !== 0 || !file_exists($sqlFile)) {
-                $detalle = implode("\n", $output);
+                $detalle = file_exists('/tmp/mysqldump_error.txt')
+                    ? file_get_contents('/tmp/mysqldump_error.txt')
+                    : 'sin detalle';
                 return redirect()->route('backups.index')
-                                ->with('error', 'mysqldump en: ' . $mysqlBin . ' | Código: ' . $exitCode . ' | Detalle: ' . $detalle);
+                    ->with('error', 'Código: ' . $exitCode . ' | ' . $detalle);
             }
 
             $zip = new \ZipArchive();
