@@ -58,6 +58,10 @@ class BackupController extends Controller
                 mkdir(storage_path('app/private/emdell'), 0755, true);
             }
 
+            // Buscar dónde está mysqldump
+            exec('which mysqldump 2>&1', $whichOutput, $whichCode);
+            $mysqlBin = !empty($whichOutput[0]) ? trim($whichOutput[0]) : 'mysqldump';
+
             $command = "{$mysqlBin} -h {$dbHost} -P {$dbPort} -u {$dbUser} " .
                 ($dbPassword ? "-p\"{$dbPassword}\"" : "") .
                 " {$dbName} > \"{$sqlFile}\" 2>&1";
@@ -67,7 +71,7 @@ class BackupController extends Controller
             if ($exitCode !== 0 || !file_exists($sqlFile)) {
                 $detalle = implode("\n", $output);
                 return redirect()->route('backups.index')
-                    ->with('error', 'Error dump SQL. Código: ' . $exitCode . ' | Detalle: ' . $detalle);
+                                ->with('error', 'mysqldump en: ' . $mysqlBin . ' | Código: ' . $exitCode . ' | Detalle: ' . $detalle);
             }
 
             $zip = new \ZipArchive();
