@@ -170,7 +170,8 @@
         {{-- Aviso Railway --}}
         <div class="info-railway">
             <i class="bi bi-info-circle-fill text-warning fs-5"></i>
-            <span>Los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se almacenan en el servidor.</span>
+            <span>Los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se almacenan en el
+                servidor.</span>
         </div>
 
         <div class="section-header">
@@ -201,18 +202,20 @@
                             @php
                                 $partesFecha = explode(' ', $file['fecha']);
                                 $fecha = $partesFecha[0] ?? '-';
-                                $hora  = $partesFecha[1] ?? '-';
+                                $hora = $partesFecha[1] ?? '-';
                             @endphp
                             <tr style="border-color: var(--border-color);">
                                 <td class="ps-4 text-muted small">{{ $i + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <div
+                                            style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                             <i class="bi bi-file-earmark-zip-fill text-warning"></i>
                                         </div>
                                         <div>
                                             <span class="fw-bold small">{{ $file['nombre'] }}</span>
-                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de datos</span>
+                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de
+                                                datos</span>
                                         </div>
                                     </div>
                                 </td>
@@ -229,10 +232,6 @@
                                     </span>
                                 </td>
                                 <td class="text-center pe-4">
-                                    <a href="{{ route('backups.download', $file['nombre']) }}"
-                                        class="btn btn-sm btn-outline-primary me-1" title="Descargar">
-                                        <i class="bi bi-download"></i>
-                                    </a>
                                     <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar"
                                         onclick="confirmarEliminar('{{ $file['nombre'] }}', '{{ route('backups.delete', $file['nombre']) }}')">
                                         <i class="bi bi-trash"></i>
@@ -244,7 +243,8 @@
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
-                                        <p>Los backups se descargan directamente a tu equipo.<br>Usa el botón de arriba para generar un respaldo.</p>
+                                        <p>Los backups se descargan directamente a tu equipo.<br>Usa el botón de arriba para
+                                            generar un respaldo.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -306,10 +306,10 @@
         }
 
         function setupPagination({ tbodyId, rowsSelId, infoId, ctrlsId, label }) {
-            const tbody   = document.getElementById(tbodyId);
+            const tbody = document.getElementById(tbodyId);
             const rowsSel = document.getElementById(rowsSelId);
-            const info    = document.getElementById(infoId);
-            const ctrls   = document.getElementById(ctrlsId);
+            const info = document.getElementById(infoId);
+            const ctrls = document.getElementById(ctrlsId);
             if (!tbody || !rowsSel) return;
 
             let page = 1;
@@ -358,11 +358,11 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             setupPagination({
-                tbodyId:   'backupsBody',
+                tbodyId: 'backupsBody',
                 rowsSelId: 'rowsBackups',
-                infoId:    'backupsInfo',
-                ctrlsId:   'backupsControles',
-                label:     'respaldos'
+                infoId: 'backupsInfo',
+                ctrlsId: 'backupsControles',
+                label: 'respaldos'
             });
         });
     </script>
