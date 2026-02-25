@@ -192,7 +192,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .info-railway {
@@ -216,7 +218,8 @@
         {{-- Aviso Railway --}}
         <div class="info-railway">
             <i class="bi bi-info-circle-fill text-warning fs-5"></i>
-            <span>En este entorno los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se almacenan en el servidor.</span>
+            <span>En este entorno los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se
+                almacenan en el servidor.</span>
         </div>
 
         <div class="section-header">
@@ -256,18 +259,20 @@
                             @php
                                 $partesFecha = explode(' ', $file['fecha']);
                                 $fecha = $partesFecha[0] ?? '-';
-                                $hora  = $partesFecha[1] ?? '-';
+                                $hora = $partesFecha[1] ?? '-';
                             @endphp
                             <tr style="border-color: var(--border-color);">
                                 <td class="ps-4 text-muted small">{{ $i + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <div
+                                            style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                             <i class="bi bi-file-earmark-zip-fill text-warning"></i>
                                         </div>
                                         <div>
                                             <span class="fw-bold small">{{ $file['nombre'] }}</span>
-                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de datos</span>
+                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de
+                                                datos</span>
                                         </div>
                                     </div>
                                 </td>
@@ -299,7 +304,8 @@
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
-                                        <p>En este entorno los backups se descargan directamente.<br>Usa el botón de arriba para generar y descargar un respaldo.</p>
+                                        <p>En este entorno los backups se descargan directamente.<br>Usa el botón de arriba para
+                                            generar y descargar un respaldo.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -359,10 +365,13 @@
                     document.getElementById('textoGenerar').textContent = 'Generando...';
                     document.getElementById('btnGenerar').disabled = true;
 
-                    // Enviar el form al iframe oculto para no recargar la página
-                    const form = document.getElementById('formGenerarBackup');
-                    form.target = 'iframeDescarga';
-                    form.submit();
+                    // Crear un link temporal y hacer click
+                    const link = document.createElement('a');
+                    link.href = '{{ route("backups.generate") }}';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
 
                     // Restaurar botón después de unos segundos
                     setTimeout(() => {
@@ -370,17 +379,6 @@
                         document.getElementById('iconGenerar').style.display = 'inline';
                         document.getElementById('textoGenerar').textContent = 'Generar Nuevo Respaldo';
                         document.getElementById('btnGenerar').disabled = false;
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Backup generado!',
-                            text: 'El archivo se ha descargado a tu equipo.',
-                            timer: 3000,
-                            showConfirmButton: false,
-                            background: 'var(--card-bg)',
-                            color: 'var(--text-dark)',
-                            iconColor: '#FFC107'
-                        });
                     }, 8000);
                 }
             });
@@ -408,10 +406,10 @@
         }
 
         function setupPagination({ tbodyId, rowsSelId, infoId, ctrlsId, label }) {
-            const tbody  = document.getElementById(tbodyId);
+            const tbody = document.getElementById(tbodyId);
             const rowsSel = document.getElementById(rowsSelId);
-            const info   = document.getElementById(infoId);
-            const ctrls  = document.getElementById(ctrlsId);
+            const info = document.getElementById(infoId);
+            const ctrls = document.getElementById(ctrlsId);
             if (!tbody || !rowsSel) return;
 
             let page = 1;
@@ -460,11 +458,11 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             setupPagination({
-                tbodyId:  'backupsBody',
+                tbodyId: 'backupsBody',
                 rowsSelId: 'rowsBackups',
-                infoId:   'backupsInfo',
-                ctrlsId:  'backupsControles',
-                label:    'respaldos'
+                infoId: 'backupsInfo',
+                ctrlsId: 'backupsControles',
+                label: 'respaldos'
             });
         });
     </script>

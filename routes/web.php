@@ -163,7 +163,7 @@ Route::middleware(['auth.check'])->group(function () {
     // ──────────────────────────────────────────────────
     Route::prefix('backups')->name('backups.')->group(function () {
         Route::get('/', [BackupController::class, 'index'])->name('index');
-        Route::post('/generate', [BackupController::class, 'generate'])->name('generate');
+        Route::get('/generate', [BackupController::class, 'generate'])->name('generate');
         Route::get('/download/{filename}', [BackupController::class, 'download'])->name('download');
         Route::delete('/delete/{filename}', [BackupController::class, 'delete'])->name('delete');
     });
