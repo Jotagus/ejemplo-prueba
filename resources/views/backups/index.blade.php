@@ -79,6 +79,12 @@
             transform: translateY(0);
         }
 
+        .btn-backup:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .pagination-wrapper {
             display: flex;
             justify-content: space-between;
@@ -186,9 +192,20 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
+        }
+
+        .info-railway {
+            background: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
     </style>
 @endsection
@@ -196,18 +213,29 @@
 @section('content')
     <div class="container-fluid">
 
+        {{-- Aviso Railway --}}
+        <div class="info-railway">
+            <i class="bi bi-info-circle-fill text-warning fs-5"></i>
+            <span>En este entorno los respaldos se <strong>descargan directamente</strong> a tu equipo al generarlos. No se almacenan en el servidor.</span>
+        </div>
+
         <div class="section-header">
             <div class="ms-auto">
-                <form action="{{ route('backups.generate') }}" method="POST" id="formGenerarBackup">
-                    @csrf
-                    <button type="submit" class="btn-backup" id="btnGenerar">
-                        <span class="spinner-backup" id="spinnerGenerar"></span>
-                        <i class="bi bi-cloud-arrow-down-fill" id="iconGenerar"></i>
-                        <span id="textoGenerar">Generar Nuevo Respaldo</span>
-                    </button>
-                </form>
+                <button type="button" class="btn-backup" id="btnGenerar" onclick="generarBackup()">
+                    <span class="spinner-backup" id="spinnerGenerar"></span>
+                    <i class="bi bi-cloud-arrow-down-fill" id="iconGenerar"></i>
+                    <span id="textoGenerar">Generar Nuevo Respaldo</span>
+                </button>
             </div>
         </div>
+
+        {{-- Formulario oculto para el POST --}}
+        <form id="formGenerarBackup" action="{{ route('backups.generate') }}" method="POST" style="display:none;">
+            @csrf
+        </form>
+
+        {{-- iframe oculto para recibir la descarga sin recargar la página --}}
+        <iframe id="iframeDescarga" name="iframeDescarga" style="display:none;"></iframe>
 
         <div class="card-emdell shadow-sm mb-4">
             <div class="table-responsive">
@@ -228,20 +256,18 @@
                             @php
                                 $partesFecha = explode(' ', $file['fecha']);
                                 $fecha = $partesFecha[0] ?? '-';
-                                $hora = $partesFecha[1] ?? '-';
+                                $hora  = $partesFecha[1] ?? '-';
                             @endphp
                             <tr style="border-color: var(--border-color);">
                                 <td class="ps-4 text-muted small">{{ $i + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div
-                                            style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,193,7,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                             <i class="bi bi-file-earmark-zip-fill text-warning"></i>
                                         </div>
                                         <div>
                                             <span class="fw-bold small">{{ $file['nombre'] }}</span>
-                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de
-                                                datos</span>
+                                            <br><span class="text-muted" style="font-size:0.7rem;">Respaldo de base de datos</span>
                                         </div>
                                     </div>
                                 </td>
@@ -273,8 +299,7 @@
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
-                                        <p>No hay respaldos disponibles aún.<br>Genera tu primer backup con el botón de arriba.
-                                        </p>
+                                        <p>En este entorno los backups se descargan directamente.<br>Usa el botón de arriba para generar y descargar un respaldo.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -314,13 +339,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-        document.getElementById('formGenerarBackup').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const form = this;
-
+        function generarBackup() {
             Swal.fire({
                 title: '¿Generar respaldo ahora?',
-                html: 'Se creará un archivo <strong>.zip</strong> con toda la base de datos actual.',
+                html: 'Se creará un archivo <strong>.zip</strong> con toda la base de datos actual y se descargará directamente a tu equipo.',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#FF6B35',
@@ -331,14 +353,38 @@
                 color: 'var(--text-dark)'
             }).then(result => {
                 if (result.isConfirmed) {
+                    // Mostrar spinner
                     document.getElementById('spinnerGenerar').style.display = 'block';
                     document.getElementById('iconGenerar').style.display = 'none';
                     document.getElementById('textoGenerar').textContent = 'Generando...';
                     document.getElementById('btnGenerar').disabled = true;
+
+                    // Enviar el form al iframe oculto para no recargar la página
+                    const form = document.getElementById('formGenerarBackup');
+                    form.target = 'iframeDescarga';
                     form.submit();
+
+                    // Restaurar botón después de unos segundos
+                    setTimeout(() => {
+                        document.getElementById('spinnerGenerar').style.display = 'none';
+                        document.getElementById('iconGenerar').style.display = 'inline';
+                        document.getElementById('textoGenerar').textContent = 'Generar Nuevo Respaldo';
+                        document.getElementById('btnGenerar').disabled = false;
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Backup generado!',
+                            text: 'El archivo se ha descargado a tu equipo.',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            background: 'var(--card-bg)',
+                            color: 'var(--text-dark)',
+                            iconColor: '#FFC107'
+                        });
+                    }, 8000);
                 }
             });
-        });
+        }
 
         function confirmarEliminar(nombre, url) {
             Swal.fire({
@@ -362,10 +408,10 @@
         }
 
         function setupPagination({ tbodyId, rowsSelId, infoId, ctrlsId, label }) {
-            const tbody = document.getElementById(tbodyId);
+            const tbody  = document.getElementById(tbodyId);
             const rowsSel = document.getElementById(rowsSelId);
-            const info = document.getElementById(infoId);
-            const ctrls = document.getElementById(ctrlsId);
+            const info   = document.getElementById(infoId);
+            const ctrls  = document.getElementById(ctrlsId);
             if (!tbody || !rowsSel) return;
 
             let page = 1;
@@ -414,11 +460,11 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             setupPagination({
-                tbodyId: 'backupsBody',
+                tbodyId:  'backupsBody',
                 rowsSelId: 'rowsBackups',
-                infoId: 'backupsInfo',
-                ctrlsId: 'backupsControles',
-                label: 'respaldos'
+                infoId:   'backupsInfo',
+                ctrlsId:  'backupsControles',
+                label:    'respaldos'
             });
         });
     </script>
