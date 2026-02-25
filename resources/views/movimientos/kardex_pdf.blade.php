@@ -298,23 +298,6 @@
 
         {{-- FIRMAS --}}
         <div class="footer">
-            <div class="signatures">
-                <div class="signature-box">
-                    <div class="signature-line">
-                        <strong>Responsable de Almacén</strong>
-                    </div>
-                </div>
-                <div class="signature-box">
-                    <div class="signature-line">
-                        <strong>Jefe de Área</strong>
-                    </div>
-                </div>
-                <div class="signature-box">
-                    <div class="signature-line">
-                        <strong>Gerencia General</strong>
-                    </div>
-                </div>
-            </div>
             <div class="generated-date">
                 Generado el {{ now()->format('d/m/Y H:i') }}
             </div>
