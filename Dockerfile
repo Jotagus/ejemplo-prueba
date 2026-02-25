@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     git \
+    default-mysql-client \
     && docker-php-ext-install \
         zip \
         pdo \

@@ -23,11 +23,11 @@ class BackupController extends Controller
             ->map(function ($file) {
                 return [
                     'nombre' => basename($file),
-                    'ruta'   => $file,
+                    'ruta' => $file,
                     'tamaño' => $this->formatSize(Storage::disk($this->disk)->size($file)),
-                    'fecha'  => Carbon::createFromTimestamp(
-                                    Storage::disk($this->disk)->lastModified($file)
-                                )->setTimezone('America/La_Paz')->format('d/m/Y H:i:s'),
+                    'fecha' => Carbon::createFromTimestamp(
+                        Storage::disk($this->disk)->lastModified($file)
+                    )->setTimezone('America/La_Paz')->format('d/m/Y H:i:s'),
                 ];
             })
             ->sortByDesc('fecha')
@@ -39,30 +39,34 @@ class BackupController extends Controller
     public function generate()
     {
         try {
-            $dbHost     = config('database.connections.mysql.host');
-            $dbPort     = config('database.connections.mysql.port');
-            $dbName     = config('database.connections.mysql.database');
-            $dbUser     = config('database.connections.mysql.username');
+            $dbHost = config('database.connections.mysql.host');
+            $dbPort = config('database.connections.mysql.port');
+            $dbName = config('database.connections.mysql.database');
+            $dbUser = config('database.connections.mysql.username');
             $dbPassword = config('database.connections.mysql.password');
-            $mysqlBin   = 'C:/xampp/mysql/bin/mysqldump';
 
-            $timestamp  = Carbon::now('America/La_Paz')->format('Y-m-d-H-i-s');
-            $sqlFile    = storage_path("app/private/emdell/dump-{$timestamp}.sql");
-            $zipFile    = storage_path("app/private/emdell/emdell-backup-{$timestamp}.zip");
+            // Detecta mysqldump según el sistema operativo
+            $mysqlBin = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
+                ? 'C:/xampp/mysql/bin/mysqldump'
+                : 'mysqldump';
+
+            $timestamp = Carbon::now('America/La_Paz')->format('Y-m-d-H-i-s');
+            $sqlFile = storage_path("app/private/emdell/dump-{$timestamp}.sql");
+            $zipFile = storage_path("app/private/emdell/emdell-backup-{$timestamp}.zip");
 
             if (!file_exists(storage_path('app/private/emdell'))) {
                 mkdir(storage_path('app/private/emdell'), 0755, true);
             }
 
-            $command = "\"{$mysqlBin}\" -h {$dbHost} -P {$dbPort} -u {$dbUser} " .
-                       ($dbPassword ? "-p\"{$dbPassword}\"" : "") .
-                       " {$dbName} > \"{$sqlFile}\"";
+            $command = "{$mysqlBin} -h {$dbHost} -P {$dbPort} -u {$dbUser} " .
+                ($dbPassword ? "-p\"{$dbPassword}\"" : "") .
+                " {$dbName} > \"{$sqlFile}\" 2>&1";
 
             exec($command, $output, $exitCode);
 
             if ($exitCode !== 0 || !file_exists($sqlFile)) {
                 return redirect()->route('backups.index')
-                                 ->with('error', 'Error al generar el dump SQL.');
+                    ->with('error', 'Error al generar el dump SQL.');
             }
 
             $zip = new \ZipArchive();
@@ -82,11 +86,11 @@ class BackupController extends Controller
             );
 
             return redirect()->route('backups.index')
-                             ->with('success', 'Backup generado correctamente.');
+                ->with('success', 'Backup generado correctamente.');
 
         } catch (\Exception $e) {
             return redirect()->route('backups.index')
-                             ->with('error', 'Excepción: ' . $e->getMessage());
+                ->with('error', 'Excepción: ' . $e->getMessage());
         }
     }
 
@@ -123,18 +127,21 @@ class BackupController extends Controller
             );
 
             return redirect()->route('backups.index')
-                             ->with('success', 'Backup eliminado correctamente.');
+                ->with('success', 'Backup eliminado correctamente.');
         }
 
         return redirect()->route('backups.index')
-                         ->with('error', 'Archivo no encontrado.');
+            ->with('error', 'Archivo no encontrado.');
     }
 
     private function formatSize($bytes)
     {
-        if ($bytes >= 1073741824) return number_format($bytes / 1073741824, 2) . ' GB';
-        if ($bytes >= 1048576)    return number_format($bytes / 1048576, 2) . ' MB';
-        if ($bytes >= 1024)       return number_format($bytes / 1024, 2) . ' KB';
+        if ($bytes >= 1073741824)
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        if ($bytes >= 1048576)
+            return number_format($bytes / 1048576, 2) . ' MB';
+        if ($bytes >= 1024)
+            return number_format($bytes / 1024, 2) . ' KB';
         return $bytes . ' B';
     }
 }
