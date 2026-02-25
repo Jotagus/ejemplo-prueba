@@ -228,26 +228,8 @@
 
     {{-- FIRMAS --}}
     <div class="footer-section">
-        <div class="signatures">
-            <div class="signature-box">
-                <div class="signature-line">
-                    <strong>ENCARGADO DE ALMACÉN</strong>
-                </div>
-            </div>
-            <div class="signature-box">
-                <div class="signature-line">
-                    <strong>JEFE DE ÁREA</strong>
-                </div>
-            </div>
-            <div class="signature-box">
-                <div class="signature-line">
-                    <strong>GERENCIA GENERAL</strong>
-                </div>
-            </div>
-        </div>
-
         <div class="page-number">
-            Página 1 de 1 | Generado automáticamente el {{ now()->format('d/m/Y H:i') }}
+            Generado el {{ now()->format('d/m/Y H:i') }}
         </div>
     </div>
 </body>
