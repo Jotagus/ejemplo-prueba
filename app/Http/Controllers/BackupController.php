@@ -9,12 +9,7 @@ use Carbon\Carbon;
 class BackupController extends Controller
 {
     protected $disk = 'local';
-    protected $backupPath;
-
-    public function __construct()
-    {
-        $this->backupPath = config('backup.backup.name');
-    }
+    protected $backupPath = 'private/emdell';
 
     public function index()
     {
@@ -109,7 +104,11 @@ class BackupController extends Controller
             'Descargó el backup: "' . $filename . '"'
         );
 
-        return Storage::disk($this->disk)->download($path, $filename);
+        return response()->download(
+            storage_path('app/' . $path),
+            $filename,
+            ['Content-Type' => 'application/zip']
+        );
     }
 
     public function delete($filename)
