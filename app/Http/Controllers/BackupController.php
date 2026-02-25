@@ -56,7 +56,7 @@ class BackupController extends Controller
 
             $command = "{$mysqlBin} -h {$dbHost} -P {$dbPort} -u {$dbUser} " .
                 ($dbPassword ? "-p\"{$dbPassword}\"" : "") .
-                " --ssl-mode=SKIP-VERIFY" .
+                " --ssl=0" .
                 " {$dbName} 2>/tmp/mysqldump_error.txt > \"{$sqlFile}\"";
 
             exec($command, $output, $exitCode);
