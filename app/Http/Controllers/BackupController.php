@@ -13,6 +13,11 @@ class BackupController extends Controller
 
     public function index()
     {
+        // DEBUG TEMPORAL
+        $rutaReal = storage_path('app/' . $this->backupPath);
+        $existeDir = file_exists($rutaReal);
+        $archivos = $existeDir ? scandir($rutaReal) : [];
+
         $files = collect(Storage::disk($this->disk)->files($this->backupPath))
             ->filter(fn($f) => str_ends_with($f, '.zip'))
             ->map(function ($file) {
@@ -27,6 +32,15 @@ class BackupController extends Controller
             })
             ->sortByDesc('fecha')
             ->values();
+
+        // Mostrar debug en pantalla
+        dd([
+            'backupPath' => $this->backupPath,
+            'rutaReal' => $rutaReal,
+            'existeDir' => $existeDir,
+            'archivosDir' => $archivos,
+            'filesStorage' => Storage::disk($this->disk)->files($this->backupPath),
+        ]);
 
         return view('backups.index', compact('files'));
     }
