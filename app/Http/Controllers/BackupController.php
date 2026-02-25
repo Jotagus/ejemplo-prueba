@@ -65,8 +65,9 @@ class BackupController extends Controller
             exec($command, $output, $exitCode);
 
             if ($exitCode !== 0 || !file_exists($sqlFile)) {
+                $detalle = implode("\n", $output);
                 return redirect()->route('backups.index')
-                    ->with('error', 'Error al generar el dump SQL.');
+                    ->with('error', 'Error dump SQL. Código: ' . $exitCode . ' | Detalle: ' . $detalle);
             }
 
             $zip = new \ZipArchive();
